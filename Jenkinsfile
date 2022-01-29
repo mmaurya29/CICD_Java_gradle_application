@@ -26,15 +26,17 @@ pipeline{
             }         
         }
         stage("Docker build and push image"){
-            script{
-                withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]) {
-                       sh '''
-                         docker build -t manishmaurya/springapp:${version} .
-                         docker login -u manishmaurya -p ${docker-pass}
-                         docker push manishmaurya/springapp:${version}
-                         docker rmi manishmaurya/springapp:${version}
-                      '''
-                }
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]) {
+                         sh '''
+                            docker build -t manishmaurya/springapp:${version} .
+                            docker login -u manishmaurya -p ${docker-pass}
+                            docker push manishmaurya/springapp:${version}
+                            docker rmi manishmaurya/springapp:${version}
+                          '''
+                    }    
+                }           
             }
         }
     }
