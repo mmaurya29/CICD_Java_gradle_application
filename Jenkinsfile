@@ -13,6 +13,7 @@ pipeline{
                             sh 'chmod +x gradlew'
                             sh './gradlew sonarqube'
                     }
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
             }          
         }
