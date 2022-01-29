@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    stages{
+        stage("SCM Checkout"){
+            steps{
+                git branch: 'devops', url: 'https://github.com/mmaurya29/CICD_Java_gradle_application.git'
+            }
+        }
+        stage("Sonar Quality check"){
+            agent {
+                docker {
+                    image 'openjdk:11'
+                }
+            }
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                            sh 'chmod +x gradlew'
+                            sh './gradlew sonarqube'
+                    }
+                }
+            }
+        }
+    }
+}
