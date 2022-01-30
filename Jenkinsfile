@@ -12,15 +12,15 @@ pipeline{
             }
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                    withSonarQubeEnv(credentialsId: 'sonar-token'){
                             sh 'chmod +x gradlew'
                             sh './gradlew sonarqube'
                     }
-                    timeout(time: 1, unit: 'HOURS') {
+                    timeout(time: 1, unit: 'HOURS'){
                       def qg = waitForQualityGate()
-                      if (qg.status != 'OK') {
+                      if (qg.status != 'OK'){
                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                      }
+                        }
                     }                   
                 }
             }         
@@ -28,7 +28,7 @@ pipeline{
         stage("Docker build and push image"){
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]) {
+                    withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]){
                          sh '''
                             docker build -t manishmaurya/springapp:${version} .
                             docker login -u manishmaurya -p ${docker-pass}
